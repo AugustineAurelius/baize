@@ -1,0 +1,56 @@
+Rust / NvChad в WSL
+
+Запуск из каталога проекта:
+  ~/.local/bin/nvim-rust .
+  ~/.local/bin/nvim-rust src/main.rs
+
+Конфигурация: ~/.config/nvim-rust
+Плагины и инструменты: ~/.local/share/nvim-rust
+Neovim: ~/.local/opt/nvim-linux-x86_64
+
+В конфигурацию можно вносить изменения напрямую. Файлы в tools/nvim —
+исходный шаблон для повторной установки. Установщик не перезаписывает
+существующую ~/.config/nvim-rust. Установка на x86_64 Ubuntu WSL:
+  bash tools/nvim/install.sh
+
+Пробел — leader. Сочетания ниже нажимаются в обычном режиме (Esc).
+  Space ff    поиск файлов
+  Space fw    поиск текста в проекте
+  Space e     дерево файлов
+  gd          определение
+  gr          использования
+  K           документация и Rust hover actions
+  Space ca    действия с кодом
+  Space rn    переименование
+  Space rr    выбор цели запуска
+  Space rt    выбор тестов
+  Space rd    выбор цели отладки
+  Space rm    раскрыть макрос
+  Space re    объяснить ошибку
+  Space rh    включить/выключить inlay hints
+  Space db    точка останова
+  F5          продолжить отладку
+  F10         шаг через
+  F11         шаг внутрь
+  Space dr    консоль отладчика
+  Space dq    остановить отладку
+
+Основы Neovim:
+  i           ввод текста
+  Esc         обычный режим
+  :w          сохранить (Rust автоматически форматируется)
+  :q          закрыть окно
+  :wq         сохранить и закрыть
+  :qa         выйти
+  :qa!        выйти без сохранения
+  Space ch    памятка NvChad
+
+Clippy запускается rust-analyzer при сохранении. Rust LSP настроен только
+через rustaceanvim; не добавляй rust_analyzer в lspconfig/Mason.
+Обновить Rust-компоненты: rustup update
+Проверка: :checkhealth rustaceanvim
+Инструменты: :Mason
+Обновление плагинов: :Lazy (после обновления проверяй совместимость).
+
+Для иконок выбери Nerd Font в настройках профиля Windows Terminal.
+Шрифт выбирается на стороне Windows, а не в WSL.
