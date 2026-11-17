@@ -4,7 +4,7 @@
 
 use std::rc::Rc;
 
-use baize::util;
+use baize::{toolbar::Toolbar, util};
 use tao::{
     event::{Event, WindowEvent},
     event_loop::{ControlFlow, EventLoop},
@@ -58,14 +58,18 @@ fn main() -> wry::Result<()> {
         use wry::WebViewBuilderExtUnix;
 
         let vbox = window.default_vbox().unwrap();
-        let address = gtk::Entry::new();
-        address.set_text(initial_url.as_str());
-        vbox.pack_start(&address, false, false, 0);
-        address.show();
+        let toolbar = Toolbar::new(initial_url.as_str());
+        vbox.pack_start(&toolbar.container, false, false, 0);
+        toolbar.container.show_all();
+        let address_for_load = toolbar.address.clone();
+        let builder = builder.with_on_page_load_handler(move |_event, url| {
+            address_for_load.set_text(&url);
+        });
+
         let webview = Rc::new(builder.build_gtk(vbox)?);
 
         let address_handler = Rc::clone(&webview);
-        address.connect_activate(move |entry| {
+        toolbar.address.connect_activate(move |entry| {
             let new_url = match util::parse_url(entry.text().as_str()) {
                 Ok(parsed_url) => parsed_url,
                 Err(e) => {
@@ -76,8 +80,16 @@ fn main() -> wry::Result<()> {
 
             if let Err(e) = address_handler.load_url(new_url.as_str()) {
                 eprintln!("Failed to load URL: {e}");
-            }
+            };
         });
+
+        let reload_handler = Rc::clone(&webview);
+        toolbar.reload.connect_clicked(move |_| {
+            if let Err(e) = reload_handler.reload() {
+                eprintln!("Failed to reload by button: {e}");
+            };
+        });
+
         webview
     };
 

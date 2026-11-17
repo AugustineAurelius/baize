@@ -18,7 +18,7 @@ reported results. The developer writes the application code.
 | [0001 — Start with Linux and an existing engine](0001-linux-first-existing-engine.md) | Accepted |
 | [0002 — Use Wry for the prototype](0002-wry-for-prototype.md) | Accepted |
 | [0003 — Use Tao for windowing](0003-tao-for-windowing.md) | Accepted |
-| [0004 — Native GTK address bar for Linux](0004-gtk-address-bar.md) | Proposed |
+| [0004 — Native GTK address bar for Linux](0004-gtk-address-bar.md) | Accepted |
 
 ## Progress
 
@@ -66,9 +66,16 @@ in the developer's WSL environment; it is not a universal Linux requirement.
 - [x] Verify earlier launches with an explicit URL and a default URL (confirmed by the developer before validation was added).
 - [x] Define and implement handling of missing/invalid addresses before creating the window (code reviewed; developer reports successful compilation).
 - [ ] Verify missing/invalid input exits with code 1 and a valid URL still opens a page.
-- [ ] Choose how to implement the address bar and navigation controls.
-- [ ] Add a visible GTK address entry above the WebView (ADR 0004 proposal).
-- [ ] On Enter, validate the entry and navigate the existing WebView.
+- [x] Choose GTK for the address bar (ADR 0004).
+- [x] Add a GTK address entry above the WebView (implemented; developer reports working navigation).
+- [x] On Enter, validate the entry and navigate the existing WebView (developer confirmed).
+- [x] Implement address updates from Wry page-load events (code reviewed).
+- [ ] Manually confirm address updates after following links and redirects.
+- [ ] Add a horizontal GTK toolbar with Back, Forward, Reload, and the address entry.
+- [ ] Connect navigation controls and verify history traversal and reload.
+
+Review on 2026-11-17: `cargo test --offline` passes (one URL parsing test).
+GUI behavior was not exercised by the assistant.
 
 Later milestones: navigation controls, tabs, persistent history/bookmarks, and
 an experimental engine developed from scratch.

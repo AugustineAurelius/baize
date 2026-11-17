@@ -1,6 +1,6 @@
 # 0004 — Native GTK address bar for Linux
 
-- Status: Proposed
+- Status: Accepted
 - Date: 2026-11-15
 
 ## Context
@@ -16,14 +16,15 @@ vertical GTK container on Linux, and Wry embeds WebKitGTK into that container.
 
 ## Decision
 
-Propose GTK 3 controls using the `gtk` 0.18 crate, compatible with the current
+Use GTK 3 controls using the `gtk` 0.18 crate, compatible with the current
 Tao/Wry dependencies. Place an Entry above the WebView. On Enter, validate input
 with the existing URL helper and navigate the existing WebView with `load_url`.
 Invalid input should leave the current page open and report an error; it must
 not terminate the application.
 
-First implement and review the visible entry; add navigation in a separate step.
-Address synchronization after redirects and link navigation is deferred.
+The entry and Enter navigation are implemented. A Wry page-load handler updates
+the same GTK Entry with the URL reported at page-load events. This does not yet
+cover URL changes made without a page load, such as History API navigation.
 
 ## Consequences
 
@@ -35,8 +36,12 @@ Address synchronization after redirects and link navigation is deferred.
 
 ## Validation
 
-Pending: entry is visible above the page, page expands on resize, and Enter loads
-a valid address while invalid input preserves the current page.
+The developer reported working Enter navigation on 2026-11-15. Code review on
+2026-11-17 confirms shared WebView ownership with Rc, non-fatal input validation,
+load_url error handling, and address updates from the page-load callback.
+`cargo test --offline` passes (one URL parsing test); this does not validate GUI
+behavior. Link/redirect address synchronization and resize behavior still need
+explicit manual confirmation.
 
 ## References
 
